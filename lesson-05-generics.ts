@@ -233,19 +233,31 @@ type UserWithoutEmail2 = Omit<UserWithOptional, "email">;
 // Example 1: Simple Record
 type UserRoles = Record<string, "admin" | "user" | "guest">;
 // Creates: { [key: string]: "admin" | "user" | "guest" }
+// NOTE: The keys (user1, user2, user3) are NOT defined in the type!
+// Record<string, ...> means ANY string can be a key.
+// I just chose "user1", "user2", "user3" as example keys - you could use ANY strings!
 const roles: UserRoles = {
-  user1: "admin",
-  user2: "user",
-  user3: "guest",
+  user1: "admin", // "user1" is just an example - could be "alice", "bob", etc.
+  user2: "user", // "user2" is just an example - could be "charlie", "diana", etc.
+  user3: "guest", // "user3" is just an example - could be "eve", "frank", etc.
 };
+// You could also write:
+// const roles2: UserRoles = {
+//   alice: "admin",
+//   bob: "user",
+//   charlie: "guest",
+// };
 
 // Example 2: Record with specific keys
+// CONTRAST: Here the keys ARE defined in the type!
+// Record<"pending" | "approved" | "rejected", ...> means ONLY these 3 keys are allowed
 type StatusMap = Record<"pending" | "approved" | "rejected", boolean>;
 // Creates: { pending: boolean; approved: boolean; rejected: boolean }
 const status: StatusMap = {
-  pending: true,
-  approved: false,
-  rejected: false,
+  pending: true, // ✅ "pending" is defined in the type
+  approved: false, // ✅ "approved" is defined in the type
+  rejected: false, // ✅ "rejected" is defined in the type
+  // invalid: true, // ❌ Error! "invalid" is NOT in the type
 };
 
 // Example 3: Record with object values
@@ -448,8 +460,12 @@ type StringIdentityArg2 = FirstArg<typeof stringIdentity>; // string
 // EXERCISES
 // ----------------------------
 
-// 1. Create a generic Stack class with push, pop, and peek methods
+// Option 2: Without curly braces (implicit return - more concise)
+function remover<T>(arr: T[]): T[] {
+  return arr.filter((item, index) => arr.indexOf(item) === index);
+}
 // 2. Write a generic function that swaps two array elements
+
 // 3. Create a generic function that filters an array based on a predicate
 // 4. Write a generic function that creates a map from an array using a key selector
 
