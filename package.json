@@ -1,0 +1,31 @@
+{
+  "name": "typescript-course",
+  "version": "1.0.0",
+  "description": "A comprehensive TypeScript course for JavaScript developers",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "lesson-01": "ts-node lesson-01-basic-types.ts",
+    "lesson-02": "ts-node lesson-02-interfaces-types.ts",
+    "lesson-03": "ts-node lesson-03-functions.ts",
+    "lesson-04": "ts-node lesson-04-classes.ts",
+    "lesson-05": "ts-node lesson-05-generics.ts",
+    "lesson-06": "ts-node lesson-06-utility-types.ts",
+    "lesson-07": "ts-node lesson-07-advanced-patterns.ts"
+  },
+  "keywords": [
+    "typescript",
+    "course",
+    "tutorial",
+    "learning"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
+  }
+}
+

@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    // Language and Environment
+    "target": "ES2020", // Compile to ES2020
+    "module": "commonjs", // Module system
+    "lib": ["ES2020", "DOM"], // Include type definitions for ES2020 and DOM
+
+    // Type Checking
+    "strict": true, // Enable all strict type checking
+    "noImplicitAny": true, // Error on implicit any
+    "strictNullChecks": true, // Strict null checking
+    "strictFunctionTypes": true, // Strict function types
+    "strictBindCallApply": true, // Strict bind/call/apply
+    "strictPropertyInitialization": true, // Strict property initialization
+    "noImplicitThis": true, // Error on implicit this
+    "alwaysStrict": true, // Parse in strict mode
+
+    // Modules
+    "esModuleInterop": true, // Enable ES module interop
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing
+
+    // Emit
+    "outDir": "./dist", // Output directory
+    "rootDir": "./", // Root directory
+    "removeComments": true, // Remove comments from output
+
+    // Interop Constraints
+    "isolatedModules": true, // Ensure each file can be safely transpiled
+
+    // Advanced Options
+    "resolveJsonModule": true, // Allow importing JSON files
+    "declaration": true, // Generate .d.ts files
+    "declarationMap": true, // Generate source maps for declarations
+    "sourceMap": true // Generate source maps
+  },
+  "include": ["lesson-*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
