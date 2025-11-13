@@ -323,6 +323,112 @@ const strResult = process("hello"); // Type: string
 const numResult = process(42); // Type: number
 
 // ----------------------------
+// 13. EXTRACTING FIRST ARGUMENT TYPE (FirstArg)
+// ----------------------------
+
+// Sometimes you want to extract the type of the first argument from a function
+// This is useful for creating type-safe wrappers or reusing types
+
+// Method 1: Using Parameters utility type
+function greet(name: string, age: number): void {
+  console.log(`Hello ${name}, you are ${age} years old`);
+}
+
+// Extract first parameter type using Parameters<T>[0]
+type FirstArg1 = Parameters<typeof greet>[0]; // string
+
+// Method 2: Create a reusable FirstArg utility type
+type FirstArg<T extends (...args: any) => any> = Parameters<T>[0];
+
+// Now you can use it easily:
+type GreetFirstArg = FirstArg<typeof greet>; // string
+
+// Practical Example 1: API Functions
+async function fetchUser(
+  userId: number,
+  includeProfile: boolean
+): Promise<User> {
+  // Fetch user logic...
+  return { id: userId, name: "", email: "" };
+}
+
+type UserIdType = FirstArg<typeof fetchUser>; // number
+
+// Use the extracted type
+function validateUserId(id: UserIdType): boolean {
+  return typeof id === "number" && id > 0;
+}
+
+// Practical Example 2: Event Handlers
+type ClickEvent = {
+  clientX: number;
+  clientY: number;
+  preventDefault(): void;
+};
+
+function handleClick(event: ClickEvent, button: string): void {
+  console.log(
+    `Button ${button} clicked at (${event.clientX}, ${event.clientY})`
+  );
+}
+
+type ClickEventType = FirstArg<typeof handleClick>; // ClickEvent
+
+// Reuse the event type in another handler
+function anotherClickHandler(event: ClickEventType): void {
+  // TypeScript knows event is ClickEvent
+  event.preventDefault();
+  console.log(event.clientX, event.clientY);
+}
+
+// Practical Example 3: Form Handlers
+function submitForm(
+  formData: { email: string; password: string },
+  options?: { validate: boolean }
+): void {
+  // Submit logic...
+}
+
+type FormDataType = FirstArg<typeof submitForm>;
+// Result: { email: string; password: string }
+
+// Use it to create a type-safe form builder
+function createForm(data: FormDataType): void {
+  // TypeScript ensures data matches the expected form structure
+  submitForm(data);
+}
+
+// Practical Example 4: Callback Functions
+function processItems<T>(
+  items: T[],
+  callback: (item: T, index: number) => void
+): void {
+  items.forEach(callback);
+}
+
+// Extract the callback's first parameter type
+type CallbackFirstArg<T> = FirstArg<Parameters<typeof processItems<T>>[1]>;
+// Breaking it down:
+// 1. typeof processItems<T> = function with callback parameter
+// 2. Parameters<...>[1] = the callback function type
+// 3. FirstArg<...> = first parameter of the callback (T)
+
+// Usage:
+type StringCallbackArg = CallbackFirstArg<string>; // string
+type NumberCallbackArg = CallbackFirstArg<number>; // number
+
+// Practical Example 5: Generic Functions
+// For generic functions, you can create a type alias for a specific instantiation
+type StringIdentity = (value: string) => string;
+type StringIdentityArg = FirstArg<StringIdentity>; // string
+
+// Or extract from a wrapper function
+function stringIdentity(value: string): string {
+  return identity(value);
+}
+type StringIdentityArg2 = FirstArg<typeof stringIdentity>; // string
+
+// ----------------------------
 // EXERCISES
 // ----------------------------
 
