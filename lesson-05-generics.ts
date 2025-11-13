@@ -208,7 +208,23 @@ type RequiredUser = Required<PartialUser>;
 type UserName = Pick<User, "name">;
 
 // Omit<T, K> - omit specific properties
+// IMPORTANT: Omit does NOT make properties optional or nullable!
+// It only removes the specified properties. Remaining properties keep their original required/optional status.
 type UserWithoutEmail = Omit<User, "email">;
+// Result: { id: number; name: string } - both id and name are still REQUIRED
+
+// Example demonstrating that Omit preserves required/optional status:
+interface UserWithOptional {
+  id: number;
+  name: string;
+  email: string;
+  age?: number; // optional property
+}
+
+type UserWithoutEmail2 = Omit<UserWithOptional, "email">;
+// Result: { id: number; name: string; age?: number }
+// - id and name remain REQUIRED
+// - age remains OPTIONAL (was optional before, still optional after)
 
 // Record<K, T> - creates an object type with keys of type K and values of type T
 // This is a GENERIC utility type!
