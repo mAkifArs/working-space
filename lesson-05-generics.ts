@@ -296,6 +296,76 @@ type Equivalent = { [key: string]: number };
 // But Record is more concise and clear!
 
 // ----------------------------
+// WHAT IS A HASH MAP?
+// ----------------------------
+
+// A hash map (also called hash table or dictionary) is a data structure that stores
+// key-value pairs and allows fast lookup, insertion, and deletion.
+
+// HOW IT WORKS:
+// 1. Takes a key (like "alice@example.com")
+// 2. Runs it through a "hash function" that converts it to a number (hash code)
+// 3. Uses that number to find the right "bucket" (storage location) in an array
+// 4. Stores the value in that bucket
+
+// EXAMPLE:
+// Key: "alice@example.com"
+//   → Hash function → Hash code: 42
+//   → Array index: 42 % arraySize
+//   → Store value at that index
+
+// PERFORMANCE:
+// - Lookup: O(1) average case (very fast!)
+// - Insert: O(1) average case
+// - Delete: O(1) average case
+// Much faster than searching through an array O(n)!
+
+// IN JAVASCRIPT/TYPESCRIPT:
+// JavaScript objects and Map are implementations of hash maps!
+
+// 1. Plain Objects (hash map under the hood)
+const userMap1: Record<string, User> = {
+  "alice@example.com": { id: 1, name: "Alice", email: "alice@example.com" },
+  "bob@example.com": { id: 2, name: "Bob", email: "bob@example.com" },
+};
+// Fast lookup: userMap1["alice@example.com"] → O(1)
+
+// 2. Map (explicit hash map, better for dynamic keys)
+const userMap2 = new Map<string, User>();
+userMap2.set("alice@example.com", {
+  id: 1,
+  name: "Alice",
+  email: "alice@example.com",
+});
+userMap2.set("bob@example.com", {
+  id: 2,
+  name: "Bob",
+  email: "bob@example.com",
+});
+// Fast lookup: userMap2.get("alice@example.com") → O(1)
+
+// WHEN TO USE:
+// - When you need fast lookups by key
+// - When you have key-value pairs
+// - When you need to avoid duplicate keys
+// - Perfect for: user databases, caches, counting occurrences, etc.
+
+// COMPARISON: Array vs Hash Map
+const usersArray = [
+  { id: 1, name: "Alice", email: "alice@example.com" },
+  { id: 2, name: "Bob", email: "bob@example.com" },
+];
+// Finding user by email: O(n) - must check every element
+const alice = usersArray.find((u) => u.email === "alice@example.com");
+
+const usersHashMap: Record<string, User> = {
+  "alice@example.com": { id: 1, name: "Alice", email: "alice@example.com" },
+  "bob@example.com": { id: 2, name: "Bob", email: "bob@example.com" },
+};
+// Finding user by email: O(1) - direct lookup!
+const alice2 = usersHashMap["alice@example.com"];
+
+// ----------------------------
 // 11. PRACTICAL EXAMPLE: API Response Wrapper
 // ----------------------------
 
