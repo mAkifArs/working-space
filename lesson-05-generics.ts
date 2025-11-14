@@ -536,8 +536,120 @@ function remover<T>(arr: T[]): T[] {
 }
 // 2. Write a generic function that swaps two array elements
 
+// BEST PRACTICE: Non-mutating version (returns new array - safer, more functional)
+function swapArrayElements<T>(arr: T[], index1: number, index2: number): T[] {
+  // Input validation
+  if (
+    index1 < 0 ||
+    index1 >= arr.length ||
+    index2 < 0 ||
+    index2 >= arr.length
+  ) {
+    throw new Error("Index out of bounds");
+  }
+  if (index1 === index2) {
+    return [...arr]; // Return copy if same index (no swap needed)
+  }
+
+  // Create a copy to avoid mutating original array
+  const result = [...arr];
+  // Swap using destructuring (clean and readable)
+  [result[index1], result[index2]] = [result[index2], result[index1]];
+  return result;
+}
+
+console.log(swapArrayElements([1, 2, 3, 4, 5, 6], 1, 2));
+// Alternative: Mutating version (modifies original array - use when you need in-place modification)
+function swapArrayElementsInPlace<T>(
+  arr: T[],
+  index1: number,
+  index2: number
+): void {
+  if (
+    index1 < 0 ||
+    index1 >= arr.length ||
+    index2 < 0 ||
+    index2 >= arr.length
+  ) {
+    throw new Error("Index out of bounds");
+  }
+  if (index1 === index2) return; // No swap needed
+
+  // Traditional temp variable approach (also valid)
+  const temp = arr[index1];
+  arr[index1] = arr[index2];
+  arr[index2] = temp;
+}
+
+// BEST PRACTICES:
+// 1. ✅ Use camelCase for function names (swapArrayElements, not ArraySwapper)
+// 2. ✅ Prefer non-mutating (returns new array) - safer and more functional
+// 3. ✅ Validate inputs (check bounds, handle edge cases)
+// 4. ✅ Use destructuring for swapping (modern, clean)
+// 5. ✅ Handle edge cases (same index, out of bounds)
+// 6. ✅ Use separate parameters (index1, index2) instead of tuple - clearer API
 // 3. Create a generic function that filters an array based on a predicate
+
+// WHAT IS A PREDICATE?
+// A predicate is a function that takes an element and returns a boolean (true/false)
+// It "predicates" (asserts) whether something is true about that element
+// Examples:
+//   - (n: number) => n > 5        → "Is this number greater than 5?"
+//   - (s: string) => s.length > 3 → "Is this string longer than 3 characters?"
+//   - (user: User) => user.age >= 18 → "Is this user an adult?"
+
+// Generic filter function using a predicate
+function filterArray<T>(arr: T[], predicate: (item: T) => boolean): T[] {
+  return arr.filter(predicate);
+}
+
+// Usage examples:
+const numbersToFilter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const evens = filterArray(numbersToFilter, (n) => n % 2 === 0); // Predicate: "Is it even?"
+// Result: [2, 4, 6, 8, 10]
+
+const stringsToFilter = ["hello", "hi", "world", "a", "test"];
+const longStrings = filterArray(stringsToFilter, (s) => s.length > 3); // Predicate: "Is it longer than 3?"
+// Result: ["hello", "world", "test"]
+
+// With custom types:
+interface Person {
+  name: string;
+  age: number;
+}
+const people: Person[] = [
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 17 },
+  { name: "Charlie", age: 30 },
+];
+const adults = filterArray(people, (person) => person.age >= 18); // Predicate: "Is person an adult?"
+// Result: [{ name: "Alice", age: 25 }, { name: "Charlie", age: 30 }]
+
+// NOTE: JavaScript's built-in Array.filter() already does this!
+// But creating your own generic version helps you understand the concept.
+
 // 4. Write a generic function that creates a map from an array using a key selector
+
+// ✅ CORRECT VERSION: Function name should be different from parameter name
+function arrayToMap<T>(
+  items: T[],
+  keySelector: (item: T) => string
+): Record<string, T> {
+  const map: Record<string, T> = {};
+  for (const item of items) {
+    map[keySelector(item)] = item;
+  }
+  return map;
+}
+
+// Usage example:
+// const users = [{ id: 1, name: "Alice", email: "alice@example.com" }];
+// const userMap = arrayToMap(users, (user) => user.email);
+// Result: { "alice@example.com": { id: 1, name: "Alice", email: "alice@example.com" } }
+
+// NOTE: Your logic was correct! The only issue was the naming conflict.
+// The function name `keySelector` conflicted with the parameter name `keySelector`.
+// Best practice: Use descriptive function names like `arrayToMap`, `createMap`, or `mapByKey`
 
 // Make this file a module to avoid global scope conflicts
 export {};

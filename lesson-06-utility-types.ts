@@ -283,9 +283,105 @@ const formState: FormState = {
 // ----------------------------
 
 // 1. Create a type that makes all properties of User optional except 'id'
+type userType = Pick<User, "id"> & Partial<Omit<User, "id">>;
 // 2. Create a type that extracts only string properties from an interface
+
+type StringProperties<T> = {
+  [K in keyof T as T[K] extends string ? K : never]: T[K];
+};
+
+// First, let's create a utility type that extracts only string properties
+// This uses mapped types with conditional types
+
+// Now apply it to an interface
+interface Friends {
+  names: string;
+  ages: number;
+  university: string;
+  from: string;
+}
+
+// Extract only string properties from Friends
+type StringsOfFriends = StringProperties<Friends>;
+// Result: { names: string; university: string; from: string }
+// Note: 'ages' is excluded because it's a number
+
+// Usage example:
+const friendStrings: StringsOfFriends = {
+  names: "Alice, Bob",
+  university: "MIT",
+  from: "USA",
+  // ages: 25, // ❌ Error! 'ages' is not a string property
+};
+
+// Apply to User interface as well
+type UserStringProperties = StringProperties<User>;
+// Result: { name: string; email: string }
+// Note: id (number), age (number), isActive (boolean) are excluded
+
+// HOW IT WORKS:
+// 1. [K in keyof T] - iterate over all keys of T
+// 2. as T[K] extends string ? K : never - if the property type extends string, keep the key, otherwise use 'never' (exclude it)
+// 3. T[K] - the value type (which we know is string for the kept properties)
+
 // 3. Write a type guard function for checking if a value is a number array
+
+function guardNumArray(value: unknown): value is number[] {
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === "number")
+  );
+}
+
 // 4. Create a utility type that makes a type nullable: Nullable<T>
+
+// Utility type that makes any type nullable (adds null to the type)
+type Nullable<T> = T | null;
+
+// Usage examples:
+type NullableString = Nullable<string>; // string | null
+type NullableNumber = Nullable<number>; // number | null
+type NullableUser = Nullable<User>; // User | null
+
+// Practical examples:
+const maybeString: NullableString = "hello"; // ✅ Can be a string
+const maybeString2: NullableString = null; // ✅ Can be null
+// const maybeString3: NullableString = undefined; // ❌ Error! undefined is not allowed
+
+const maybeUser: NullableUser = {
+  id: 1,
+  name: "John",
+  email: "john@example.com",
+  age: 30,
+  isActive: true,
+}; // ✅ Can be a User object
+const maybeUser2: NullableUser = null; // ✅ Can be null
+
+// Common use case: API responses that might return null
+function fetchUser(id: number): Nullable<User> {
+  // Simulate API call
+  if (id > 0) {
+    return {
+      id,
+      name: "John",
+      email: "john@example.com",
+      age: 30,
+      isActive: true,
+    };
+  }
+  return null; // User not found
+}
+
+const user = fetchUser(1);
+if (user !== null) {
+  // TypeScript knows user is User (not null) here
+  console.log(user.name); // ✅ Works!
+} else {
+  console.log("User not found");
+}
+
+// NOTE: Nullable<T> is similar to T | null
+// The difference is that Nullable is a reusable utility type
+// You could also write: type MaybeUser = User | null (same result)
 
 // Make this file a module to avoid global scope conflicts
 export {};
