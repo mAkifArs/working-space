@@ -35,40 +35,35 @@ Before starting, you should be comfortable with:
 ```bash
 # If using git
 git clone <repository-url>
-cd TypeScript-Course
+cd working-space
 
 # Or simply download and extract the folder
 ```
 
-### 2. Install TypeScript
+### 2. Install Dependencies
 
-**Option A: Global Installation (Recommended for Learning)**
-```bash
-npm install -g typescript
-npm install -g ts-node
-```
-
-**Option B: Local Installation**
 ```bash
 npm install
 ```
 
-### 3. Verify Installation
+This will install:
+- TypeScript (`typescript`)
+- ts-node (for running TypeScript directly)
+- Type definitions for Node.js (`@types/node`)
+
+### 3. Run Your First Lesson
 
 ```bash
-tsc --version
-# Should show: Version 5.x.x or higher
-```
+# Using npm scripts (recommended)
+npm run lesson-01
 
-### 4. Run Your First Lesson
+# Or run any lesson directly
+npm run lesson-02
+npm run lesson-03
+# ... and so on
 
-```bash
-# Using ts-node (runs directly)
-ts-node lesson-01-basic-types.ts
-
-# Or compile then run
-tsc lesson-01-basic-types.ts
-node lesson-01-basic-types.js
+# Or use ts-node directly
+npx ts-node lesson-01-basic-types.ts
 ```
 
 ---
@@ -412,7 +407,7 @@ npm install -g typescript
 ```
 
 ### Module not found errors
-Make sure you're in the `TypeScript-Course` directory when running commands.
+Make sure you're in the project root directory when running commands.
 
 ### Compilation errors
 Check that your `tsconfig.json` is in the same directory. The course uses strict mode, which is good for learning!
