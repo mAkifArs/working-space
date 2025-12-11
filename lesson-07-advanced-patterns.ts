@@ -300,9 +300,7 @@ const emitter = new EventEmitter();
 emitter.on("click", (event) => {
   console.log(event.x, event.y); // TypeScript knows event has x and y
 });
-/* dwadawd
-dwadawdw
-awdawdawd */
+
 emitter.on("keypress", (event) => {
   console.log(event.key); // TypeScript knows event has key
 });
